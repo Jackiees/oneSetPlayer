@@ -36,6 +36,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     url: '/search',
     views: {
       'menuContent': {
+        controller: 'HomeCtrl',
         templateUrl: 'templates/search.html'
       }
     }
@@ -45,6 +46,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       url: '/browse',
       views: {
         'menuContent': {
+          controller: 'GameCtrl',
           templateUrl: 'templates/browse.html'
         }
       }
