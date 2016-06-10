@@ -86,7 +86,11 @@ angular.module('starter.controllers', [])
   };
 
   var controleInput = function(inputArray) {
-    var inputNumbers = inputArray;
+    var inputNumbers = inputArray[0];
+    var inputColors = inputArray[1];
+    // console.log(inputArray);
+    // console.log(inputNumbers);
+    // console.log(inputColors);
 
     var permArr = [],
     usedChars = [];
@@ -106,15 +110,43 @@ angular.module('starter.controllers', [])
       return permArr
     };
 
+    // var permArrCol = [],
+    // usedCharsCol = [];
+    //
+    // function permute_col(input) {
+    //   console.log(input);
+    //   var i, ch;
+    //   for (i = 0; i < input.length; i++) {
+    //     ch = input.splice(i, 1)[0];
+    //     usedCharsCol.push(ch);
+    //     if (input.length == 0) {
+    //       permArr.push(usedCharsCol.slice());
+    //     }
+    //     permute(input);
+    //     input.splice(i, 0, ch);
+    //     usedCharsCol.pop();
+    //   }
+    //   return permArrCol
+    // };
+
     permute(inputNumbers);
+    // permute_col(inputColors);
+
     console.log(permArr);
+    // console.log(permArrCol);
 
     for (var i = 0; i < permArr.length; i++) {
       console.log(permArr[i]);
       if (checkIfNumbersAreConsecutive(permArr[i]) === true) {
-        $scope.score++;
-        console.log('plus');
-        return;
+
+          if(inputColors[0] === inputColors[1] && inputColors[1] === inputColors[2]) {
+            $scope.score++;
+            console.log('plus');
+            return;
+          }
+        // $scope.score++;
+        // console.log('plus');
+        // return;
       } else if (i === 5) {
         console.log('minus');
         firstNumber = undefined;
@@ -187,6 +219,9 @@ angular.module('starter.controllers', [])
   var getRandomNumbersNew = function() {
 
     var numbersVB = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    var color1 = [1,2,3,1];
+    var color2 = [2,3,1,2];
+    var color3 = [3,1,2,3];
 
     function shuffle(o) {
       for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
@@ -194,25 +229,28 @@ angular.module('starter.controllers', [])
     };
 
     var randomVB = shuffle(numbersVB);
+    var randomColor1 = shuffle(color1);
+    var randomColor2 = shuffle(color2);
+    var randomColor3 = shuffle(color3);
 
-    var uno = randomVB.slice(0,3);
-    var duo = randomVB.slice(3,6);
-    var trio = randomVB.slice(6,9);
-    // console.log(uno);
+    var uno = randomVB.slice(0,4);
+    var duo = randomVB.slice(3,7);
+    var trio = randomVB.slice(5,9);
+    console.log(uno);
 
 
     for (a=0;a<uno.length;a++) {
-      $scope.randomNumbers1.push({num:uno[a],click:false})
+      $scope.randomNumbers1.push({num:uno[a],col:randomColor1[a],click:false})
     }
 
     // console.log($scope.randomNumbers1);
 
     for (b=0;b<duo.length;b++) {
-      $scope.randomNumbers2.push({num:duo[b],click:false})
+      $scope.randomNumbers2.push({num:duo[b],col:randomColor2[b],click:false})
     }
 
     for (c=0;c<trio.length;c++) {
-      $scope.randomNumbers3.push({num:trio[c],click:false})
+      $scope.randomNumbers3.push({num:trio[c],col:randomColor3[c],click:false})
     }
 
     console.log($scope.randomNumbers1);
@@ -252,10 +290,17 @@ angular.module('starter.controllers', [])
         $scope.thirdNumber = thirdNumber.num;
 
         // Set 3 choices in order
-        var inputArray = [];
-        inputArray.push(firstNumber.num);
-        inputArray.push(secondNumber.num);
-        inputArray.push(thirdNumber.num);
+        var inputArrayNumber = [];
+        var inputArrayColor = [];
+
+        inputArrayNumber.push(firstNumber.num);
+        inputArrayNumber.push(secondNumber.num);
+        inputArrayNumber.push(thirdNumber.num);
+        inputArrayColor.push(firstNumber.col);
+        inputArrayColor.push(secondNumber.col);
+        inputArrayColor.push(thirdNumber.col);
+        var inputArray = [inputArrayNumber,inputArrayColor];
+        console.log(inputArray);
         controleInput(inputArray);
       }
 
@@ -277,10 +322,17 @@ angular.module('starter.controllers', [])
         console.log(thirdNumber);
         $scope.thirdNumber = thirdNumber.num;
 
-        var inputArray = [];
-        inputArray.push(firstNumber.num);
-        inputArray.push(secondNumber.num);
-        inputArray.push(thirdNumber.num);
+        var inputArrayNumber = [];
+        var inputArrayColor = [];
+
+        inputArrayNumber.push(firstNumber.num);
+        inputArrayNumber.push(secondNumber.num);
+        inputArrayNumber.push(thirdNumber.num);
+        inputArrayColor.push(firstNumber.col);
+        inputArrayColor.push(secondNumber.col);
+        inputArrayColor.push(thirdNumber.col);
+        var inputArray = [inputArrayNumber,inputArrayColor];
+        console.log(inputArray);
         controleInput(inputArray);
       }
 
@@ -302,10 +354,17 @@ angular.module('starter.controllers', [])
         console.log(thirdNumber);
         $scope.thirdNumber = thirdNumber.num;
 
-        var inputArray = [];
-        inputArray.push(firstNumber.num);
-        inputArray.push(secondNumber.num);
-        inputArray.push(thirdNumber.num);
+        var inputArrayNumber = [];
+        var inputArrayColor = [];
+
+        inputArrayNumber.push(firstNumber.num);
+        inputArrayNumber.push(secondNumber.num);
+        inputArrayNumber.push(thirdNumber.num);
+        inputArrayColor.push(firstNumber.col);
+        inputArrayColor.push(secondNumber.col);
+        inputArrayColor.push(thirdNumber.col);
+        var inputArray = [inputArrayNumber,inputArrayColor];
+        console.log(inputArray);
         controleInput(inputArray);
 
       }
