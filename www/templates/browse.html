@@ -1,6 +1,6 @@
 <ion-view view-title="Game" hide-back-button="true">
   <ion-content>
-    <div style="text-align:center;margin-top:50px;">
+    <div style="text-align:center;margin-top:20px;">
       <h1>Score: {{score}}</h1>
       <h1>Time left: <b>0:</b><b ng-bind="counter"></b></h1>
     </div><br/>
@@ -16,12 +16,10 @@
     <div ng-show="game">
       <div class="row" style="text-align:center;font-size:20px;font-weight:bold;">
         <!-- <div class="col" style="border:solid 1px;margin-right:5px;height:50px;" ng-repeat="num in randomNumbers1" ng-click="{{num.click === false}} ? press(1,$index): null"> -->
-        <div class="col" style="border:solid 1px;margin-right:5px;height:50px;padding:0px;" ng-repeat="num in randomNumbers1" ng-click="press(1,$index)">
-            <a class="col" href="" style="color:black;text-decoration:none;height:100%;" ng-if="!num.click">{{num.num}}</a>
-            <a class="col" href="" style="background-color:#787878;color:white;text-decoration:none;height:100%;" ng-if="num.click">{{num.num}}</a>
-            <!-- <a class="col" href="" style="color:black;text-decoration:none;" ng-if="!num.click" ng-click="press(1,$index)">{{num.num}}</a> -->
-            <!-- <a class="col" href="" style="background-color:red;text-decoration:none;" ng-if="num.click">{{num.num}}</a> -->
-            <!-- <a ng-click="1==1 ? test() : null">click</a> -->
+        <div class="col" style="border:solid 1px;margin-right:5px;height:auto;padding:0px;" ng-repeat="num in randomNumbers1" ng-click="press(1,$index)">
+            <!-- <a class="col" href="" style="color:black;text-decoration:none;"><img src="img/{{num.num}}.png"></a> -->
+            <a class="col" href="" style="color:black;text-decoration:none;height:100%;" ng-if="!num.click"><img src="img/{{num.num}}.png"></a>
+            <a class="col" href="" style="background-color:#cc0000;color:white;text-decoration:none;height:100%;" ng-if="num.click"><img src="img/{{num.num}}click.png"></a>
         </div>
         <!-- <div class="col" style="border:solid 1px;margin-right:5px;height:50px;" ng-repeat="num in randomNumbers1" ng-if="num.click">{{num.num}} -->
         <!-- </div> -->
@@ -30,18 +28,20 @@
 
     <div ng-show="game">
       <div class="row" style="text-align:center;font-size:20px;font-weight:bold;">
-        <div class="col" style="border:solid 1px;margin-right:5px;height:50px;padding:0px;" ng-repeat="num in randomNumbers2" ng-click="press(2,$index)">
-          <a class="col" href="" style="color:black;text-decoration:none;" ng-if="!num.click">{{num.num}}</a>
-          <a class="col" href="" style="background-color:#787878;color:white;text-decoration:none;height:100%;" ng-if="num.click">{{num.num}}</a>
+        <div class="col" style="border:solid 1px;margin-right:5px;height:auto;padding:0px;" ng-repeat="num in randomNumbers2" ng-click="press(2,$index)">
+          <!-- <a class="col" href="" style="color:black;text-decoration:none;"><img src="img/1.png"></a> -->
+          <a class="col" href="" style="color:black;text-decoration:none;" ng-if="!num.click"><img src="img/{{num.num}}.png"></a>
+          <a class="col" href="" style="background-color:#cc0000;color:white;text-decoration:none;height:100%;" ng-if="num.click"><img src="img/{{num.num}}click.png"></a>
         </div>
     </div>
       </div>
 
     <div ng-show="game">
       <div class="row" style="text-align:center;font-size:20px;font-weight:bold;">
-        <div class="col" style="border:solid 1px;margin-right:5px;height:50px;padding:0px;" ng-repeat="num in randomNumbers3" ng-click="press(3,$index)">
-          <a class="col" href="" style="color:black;text-decoration:none;" ng-if="!num.click">{{num.num}}</a>
-          <a class="col" href="" style="background-color:#787878;color:white;text-decoration:none;height:100%;" ng-if="num.click">{{num.num}}</a>
+        <div class="col" style="border:solid 1px;margin-right:5px;height:auto;padding:0px;" ng-repeat="num in randomNumbers3" ng-click="press(3,$index)">
+          <!-- <a class="col" href="" style="color:black;text-decoration:none;"><img src="img/1.png"></a> -->
+          <a class="col" href="" style="color:black;text-decoration:none;height:100%;" ng-if="!num.click"><img src="img/{{num.num}}.png"></a>
+          <a class="col" href="" style="background-color:#cc0000;color:white;text-decoration:none;height:100%;" ng-if="num.click"><img src="img/{{num.num}}click.png"></a>
         </div>
     </div>
   </div>

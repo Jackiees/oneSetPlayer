@@ -54,7 +54,6 @@ angular.module('starter.controllers', [])
 .controller('GameCtrl', function($scope,$state,$window,$timeout) {
 
   // Check if numbers are consecutive
-
   var checkIfNumbersAreConsecutive = function(array) {
     var arr     = array;
     var results = [];
@@ -63,7 +62,6 @@ angular.module('starter.controllers', [])
     var sequence = 0;
     for (var i = 0; i < limit; ++i) {
       var diff = arr[i+1] - arr[i];
-      // if (sequence && sequence === diff) {
       if(sequence === diff && diff !== 0) {
         results.push(i-1);
         continue;
@@ -72,9 +70,17 @@ angular.module('starter.controllers', [])
       ? diff
       : 0;
     }
-    // console.log(results[0]);
     if (results[0] === 0) {
       console.log('true');
+      firstNumber = undefined;
+      secondNumber = undefined;
+      thirdNumber = undefined;
+      addTime();
+      // $scope.score++;
+      $scope.randomNumbers1 = [];
+      $scope.randomNumbers2 = [];
+      $scope.randomNumbers3 = [];
+      getRandomNumbersNew();
       return true;
     }
   };
@@ -106,8 +112,35 @@ angular.module('starter.controllers', [])
     for (var i = 0; i < permArr.length; i++) {
       console.log(permArr[i]);
       if (checkIfNumbersAreConsecutive(permArr[i]) === true) {
+        $scope.score++;
+        console.log('plus');
         return;
+      } else if (i === 5) {
+        console.log('minus');
+        firstNumber = undefined;
+        secondNumber = undefined;
+        thirdNumber = undefined;
+        $scope.score--;
+        $scope.randomNumbers1 = [];
+        $scope.randomNumbers2 = [];
+        $scope.randomNumbers3 = [];
+        getRandomNumbersNew();
+        return false;
       }
+
+      // console.log(i);
+
+
+      // else if(checkIfNumbersAreConsecutive(permArr[i]) === false) {
+      //   console.log('minus');
+      //     $scope.score--;
+      //     return;
+      // }
+      // else {
+      //   console.log('minus');
+      //   $scope.score--;
+      //   return;
+      // }
     }
 
   };
@@ -153,7 +186,7 @@ angular.module('starter.controllers', [])
   // Get random numbers between
   var getRandomNumbersNew = function() {
 
-    var numbersVB = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+    var numbersVB = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     function shuffle(o) {
       for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
@@ -162,9 +195,9 @@ angular.module('starter.controllers', [])
 
     var randomVB = shuffle(numbersVB);
 
-    var uno = randomVB.slice(0,4);
-    var duo = randomVB.slice(5,9);
-    var trio = randomVB.slice(10,14);
+    var uno = randomVB.slice(0,3);
+    var duo = randomVB.slice(3,6);
+    var trio = randomVB.slice(6,9);
     // console.log(uno);
 
 
@@ -182,6 +215,11 @@ angular.module('starter.controllers', [])
       $scope.randomNumbers3.push({num:trio[c],click:false})
     }
 
+    console.log($scope.randomNumbers1);
+    console.log($scope.randomNumbers2);
+    console.log($scope.randomNumbers3);
+
+
   };
 
   getRandomNumbersNew();
@@ -197,8 +235,6 @@ angular.module('starter.controllers', [])
     // console.log(row + ' ' + index);
 
     if (row === 1) {
-      // console.log(firstNumber);
-
       if (firstNumber === undefined || firstNumber === null) {
         firstNumber = $scope.randomNumbers1[index];
         $scope.randomNumbers1[index].click = true;
@@ -216,55 +252,11 @@ angular.module('starter.controllers', [])
         $scope.thirdNumber = thirdNumber.num;
 
         // Set 3 choices in order
-
-
-
-        // var een = (firstNumber.num+1);
-        // var twee = (secondNumber.num+1);
-        // var drie = thirdNumber.num;
-        //
-        // console.log(een);
-        // console.log(twee);
-        // console.log(drie);
-        console.log(firstNumber.num);
-        console.log(secondNumber.num);
-        console.log(thirdNumber.num);
-
-        // The calculation if it is a correct set
-        // if (twee === drie) {
-        //   console.log('2 and 3 is same');
-        //   if (een === secondNumber.num) {
-        //     console.log('2 and 1 is same');
-        //     firstNumber = undefined;
-        //     secondNumber = undefined;
-        //     thirdNumber = undefined;
-        //     addTime();
-        //     $scope.score++;
-        //     $scope.randomNumbers1 = [];
-        //     $scope.randomNumbers2 = [];
-        //     $scope.randomNumbers3 = [];
-        //     getRandomNumbersNew();
-        //   } else {
-        //     firstNumber = undefined;
-        //     secondNumber = undefined;
-        //     thirdNumber = undefined;
-        //     $scope.score--;
-        //     $scope.randomNumbers1 = [];
-        //     $scope.randomNumbers2 = [];
-        //     $scope.randomNumbers3 = [];
-        //     getRandomNumbersNew();
-        //   }
-        // } else {
-        //   // alert('wrong');
-        //   firstNumber = undefined;
-        //   secondNumber = undefined;
-        //   thirdNumber = undefined;
-        //   $scope.score--;
-        //   $scope.randomNumbers1 = [];
-        //   $scope.randomNumbers2 = [];
-        //   $scope.randomNumbers3 = [];
-        //   getRandomNumbersNew();
-        // }
+        var inputArray = [];
+        inputArray.push(firstNumber.num);
+        inputArray.push(secondNumber.num);
+        inputArray.push(thirdNumber.num);
+        controleInput(inputArray);
       }
 
     } else if (row ===2) {
@@ -285,52 +277,11 @@ angular.module('starter.controllers', [])
         console.log(thirdNumber);
         $scope.thirdNumber = thirdNumber.num;
 
-        // var een = (firstNumber.num+1);
-        // var twee = (secondNumber.num+1);
-        // var drie = thirdNumber.num;
-        //
-        // console.log(een);
-        // console.log(twee);
-        // console.log(drie);
-        console.log(firstNumber.num);
-        console.log(secondNumber.num);
-        console.log(thirdNumber.num);
-
-        // The calculation if it is a correct set
-        // if (twee === drie) {
-        //   console.log('2 and 3 is same');
-        //   if (een === secondNumber.num) {
-        //     console.log('2 and 1 is same');
-        //     firstNumber = undefined;
-        //     secondNumber = undefined;
-        //     thirdNumber = undefined;
-        //     addTime();
-        //     $scope.score++;
-        //     $scope.randomNumbers1 = [];
-        //     $scope.randomNumbers2 = [];
-        //     $scope.randomNumbers3 = [];
-        //     getRandomNumbersNew();
-        //   } else {
-        //     firstNumber = undefined;
-        //     secondNumber = undefined;
-        //     thirdNumber = undefined;
-        //     $scope.score--;
-        //     $scope.randomNumbers1 = [];
-        //     $scope.randomNumbers2 = [];
-        //     $scope.randomNumbers3 = [];
-        //     getRandomNumbersNew();
-        //   }
-        // } else {
-        //   // alert('wrong');
-        //   firstNumber = undefined;
-        //   secondNumber = undefined;
-        //   thirdNumber = undefined;
-        //   $scope.score--;
-        //   $scope.randomNumbers1 = [];
-        //   $scope.randomNumbers2 = [];
-        //   $scope.randomNumbers3 = [];
-        //   getRandomNumbersNew();
-        // }
+        var inputArray = [];
+        inputArray.push(firstNumber.num);
+        inputArray.push(secondNumber.num);
+        inputArray.push(thirdNumber.num);
+        controleInput(inputArray);
       }
 
     } else if (row===3) {
@@ -351,52 +302,12 @@ angular.module('starter.controllers', [])
         console.log(thirdNumber);
         $scope.thirdNumber = thirdNumber.num;
 
-        // var een = (firstNumber.num+1);
-        // var twee = (secondNumber.num+1);
-        // var drie = thirdNumber.num;
-        //
-        // console.log(een);
-        // console.log(twee);
-        // console.log(drie);
-        console.log(firstNumber.num);
-        console.log(secondNumber.num);
-        console.log(thirdNumber.num);
+        var inputArray = [];
+        inputArray.push(firstNumber.num);
+        inputArray.push(secondNumber.num);
+        inputArray.push(thirdNumber.num);
+        controleInput(inputArray);
 
-        // The calculation if it is a correct set
-        // if (twee === drie) {
-        //   console.log('2 and 3 is same');
-        //   if (een === secondNumber.num) {
-        //     console.log('2 and 1 is same');
-        //     firstNumber = undefined;
-        //     secondNumber = undefined;
-        //     thirdNumber = undefined;
-        //     addTime();
-        //     $scope.score++;
-        //     $scope.randomNumbers1 = [];
-        //     $scope.randomNumbers2 = [];
-        //     $scope.randomNumbers3 = [];
-        //     getRandomNumbersNew();
-        //   } else {
-        //     firstNumber = undefined;
-        //     secondNumber = undefined;
-        //     thirdNumber = undefined;
-        //     $scope.score--;
-        //     $scope.randomNumbers1 = [];
-        //     $scope.randomNumbers2 = [];
-        //     $scope.randomNumbers3 = [];
-        //     getRandomNumbersNew();
-        //   }
-        // } else {
-        //   // alert('wrong');
-        //   firstNumber = undefined;
-        //   secondNumber = undefined;
-        //   thirdNumber = undefined;
-        //   $scope.score--;
-        //   $scope.randomNumbers1 = [];
-        //   $scope.randomNumbers2 = [];
-        //   $scope.randomNumbers3 = [];
-        //   getRandomNumbersNew();
-        // }
       }
 
     }
