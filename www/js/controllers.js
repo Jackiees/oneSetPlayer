@@ -70,27 +70,157 @@ angular.module('starter.controllers', [])
       ? diff
       : 0;
     }
-    if (results[0] === 0) {
-      console.log('true');
+    // if (results[0] === 0) {
+    //   // console.log('true');
+    //   firstNumber = undefined;
+    //   secondNumber = undefined;
+    //   thirdNumber = undefined;
+    //   addTime();
+    //   // $scope.score++;
+    //   $scope.randomNumbers1 = [];
+    //   $scope.randomNumbers2 = [];
+    //   $scope.randomNumbers3 = [];
+    //   getRandomNumbersNew();
+    //   return true;
+    // }
+  };
+
+  // What cards are used?
+  // var cardsChosenByPlayer = [];
+
+  // Function for controling if the input from PLAYER is correct according to the GAME RULES
+  // When does PLAYER gets points?
+  // Game has 4 different options: in number (I, II, III), symbol (triangles, rounds, swirls), color (red, green, purple) and filling (fill,stripes, empty)
+  // Overal rule: all three cards must be the same or all different
+
+  // RULE 1: same Number but different inputColors and different Symbol
+  // RULE 2: consecutive inputNumbers with same inputColors
+
+  var controleInput = function(inputArray) {
+    // console.log(inputArray);
+    // Array with InputNumbers 1, 2 or 3
+    var inputNumbers = inputArray[0];
+    // Array with InputColors: 1 for RED, 2 for GREEN, 3 for PURPLE
+    var inputColors = inputArray[1];
+    // Array with InputFilling: 1 for FILLED, 2 for STRIPES and 3 for EMPTY
+    var inputFillings = inputArray[2];
+    // Array with InputSymbol: 1 for DIAMOND, 2 for OVAL and 3 for SQUIGGLE
+    var inputSymbols = inputArray[3];
+
+    var arraySortedInputNumbers = inputNumbers;
+    arraySortedInputNumbers.sort();
+    var sortedInputNumbers = arraySortedInputNumbers.toString();
+    // console.log(inputNumbers);
+    // console.log(inputColors);
+
+    // Check for similarities of the three cards: 4 kinds of similarities
+    var similarInputNumbers = inputNumbers[0] === inputNumbers[1] && inputNumbers[1] === inputNumbers[2] && inputNumbers[0] === inputNumbers[2];
+    var similarInputColors = inputColors[0] === inputColors[1] && inputColors[1] === inputColors[2] && inputColors[0] === inputColors[2];
+    var similarInputFillings = inputFillings[0] === inputFillings[1] && inputFillings[1] === inputFillings[2] && inputFillings[0] === inputFillings[2];
+    var similarInputSymbols = inputSymbols[0] === inputSymbols[1] && inputSymbols[1] === inputSymbols[2] && inputSymbols[0] === inputSymbols[2];
+
+    console.log('CHECK ALL SIMILARITIES');
+    console.log("Similar numbers: " + similarInputNumbers);
+    console.log("Similar colors: " + similarInputColors);
+    console.log("Similar fillings: " + similarInputFillings);
+    console.log("Similar symbols: " + similarInputSymbols);
+
+    var differentInputColors = inputColors[0] !== inputColors[1] && inputColors[0] !== inputColors[2] && inputColors[1] !== inputColors[2];
+    // console.log('all three color different = ' + differentInputColors);
+    var similarInputNumbersDifferentSymbol = sortedInputNumbers === "1,4,7" || sortedInputNumbers === "2,5,8" || sortedInputNumbers === "3,6,9";
+    var similarInputNumbersDifferentSymbolAndDifferentColor = similarInputNumbersDifferentSymbol && differentInputColors;
+
+    // RULE 1: same Number but different inputColors and different Symbol
+    if (similarInputNumbersDifferentSymbolAndDifferentColor === true) {
+      alert('Rule 1: similarInputNumbersDifferentSymbolAndDifferentColor');
       firstNumber = undefined;
       secondNumber = undefined;
       thirdNumber = undefined;
       addTime();
-      // $scope.score++;
-      $scope.randomNumbers1 = [];
-      $scope.randomNumbers2 = [];
-      $scope.randomNumbers3 = [];
-      getRandomNumbersNew();
-      return true;
+      $scope.score++;
+      // $scope.randomNumbers1 = [];
+      // $scope.randomNumbers2 = [];
+      // $scope.randomNumbers3 = [];
+      // get3NewCards();
+      // getRandomNumbersNew();
+      // return;
+    } else {
+      firstNumber = undefined;
+      secondNumber = undefined;
+      thirdNumber = undefined;
+      $scope.score--;
+      // $scope.randomNumbers1 = [];
+      // $scope.randomNumbers2 = [];
+      // $scope.randomNumbers3 = [];
+      // get3NewCards();
+      // getRandomNumbersNew();
     }
-  };
 
-  var controleInput = function(inputArray) {
-    var inputNumbers = inputArray[0];
-    var inputColors = inputArray[1];
-    // console.log(inputArray);
-    // console.log(inputNumbers);
-    // console.log(inputColors);
+    // console.log(arrayCardsOnTable);
+
+
+    // Replace 3 chosen cards with 3 new cards from deck
+    // Pick 3 new cards
+    var newCards = [];
+
+    for (var y = 0; y<3;y++) {
+        var number = getRandomNumber();
+        var item = cardDeck[number];
+        newCards.push(item);
+        // $scope.randomNumbers.push(item);
+        cardDeck.splice(number,1);
+      }
+
+    // console.log(newCards);
+
+    //
+    // var newCards = [
+    //   {num:3,col:2,fill:1,sym:1},
+    //   {num:2,col:2,fill:3,sym:1},
+    //   {num:2,col:1,fill:2,sym:1}
+    // ];
+
+
+    // console.log(removeTheseCards);
+
+    // Replace the chosen cards with the 3 new cards
+    for (var x = 0; x < removeTheseCards.length; x++) {
+      if (removeTheseCards[x].row === 1) {
+        $scope.randomNumbers1[removeTheseCards[x].number] = newCards[x];
+      } else if (removeTheseCards[x].row === 2) {
+        $scope.randomNumbers2[removeTheseCards[x].number] = newCards[x];
+      } else if (removeTheseCards[x].row === 3) {
+        $scope.randomNumbers3[removeTheseCards[x].number] = newCards[x];
+      }
+
+    }
+
+    // console.log(removeTheseCards);
+    removeTheseCards = [];
+    // console.log(cardDeck);
+
+    // Replace 3 chosen cards with 3 new cards from deck
+    // $scope.randomNumbers1[0] = {num:3,col:2,fill:1,sym:1};
+    // $scope.randomNumbers1[1] = {num:2,col:2,fill:3,sym:1};
+    // $scope.randomNumbers1[2] = {num:2,col:1,fill:2,sym:1};
+    // $scope.randomNumbers1[1] = arrayCardsOnTable[1];
+    // $scope.randomNumbers1[2] = arrayCardsOnTable[2];
+    // $scope.randomNumbers1[3] = arrayCardsOnTable[3];
+    //
+    // $scope.randomNumbers2.push(arrayCardsOnTable[4]);
+    // $scope.randomNumbers2.push(arrayCardsOnTable[5]);
+    // $scope.randomNumbers2.push(arrayCardsOnTable[6]);
+    // $scope.randomNumbers2.push(arrayCardsOnTable[7]);
+    //
+    // $scope.randomNumbers3.push(arrayCardsOnTable[8]);
+    // $scope.randomNumbers3.push(arrayCardsOnTable[9]);
+    // $scope.randomNumbers3.push(arrayCardsOnTable[10]);
+    // $scope.randomNumbers3.push(arrayCardsOnTable[11]);
+
+    // console.log(similarInputNumbersDifferentSymbolAndDifferentColor);
+    // console.log("same number with different symbol= " + similarInputNumbersDifferentSymbol);
+    // console.log("same symbol= " + similarInputNumbers);
+    // console.log("same color= " + similarInputColors);
 
     var permArr = [],
     usedChars = [];
@@ -110,11 +240,11 @@ angular.module('starter.controllers', [])
       return permArr
     };
 
-    // var permArrCol = [],
-    // usedCharsCol = [];
+    // var permArrCol = [];
+    // var usedCharsCol = [];
     //
     // function permute_col(input) {
-    //   console.log(input);
+    //   // console.log(input);
     //   var i, ch;
     //   for (i = 0; i < input.length; i++) {
     //     ch = input.splice(i, 1)[0];
@@ -126,54 +256,40 @@ angular.module('starter.controllers', [])
     //     input.splice(i, 0, ch);
     //     usedCharsCol.pop();
     //   }
-    //   return permArrCol
+    //   return permArrCol;
     // };
 
     permute(inputNumbers);
     // permute_col(inputColors);
 
-    console.log(permArr);
+    // console.log(permArr);
     // console.log(permArrCol);
 
-    for (var i = 0; i < permArr.length; i++) {
-      console.log(permArr[i]);
-      if (checkIfNumbersAreConsecutive(permArr[i]) === true) {
-
-          if(inputColors[0] === inputColors[1] && inputColors[1] === inputColors[2]) {
-            $scope.score++;
-            console.log('plus');
-            return;
-          }
-        // $scope.score++;
-        // console.log('plus');
-        // return;
-      } else if (i === 5) {
-        console.log('minus');
-        firstNumber = undefined;
-        secondNumber = undefined;
-        thirdNumber = undefined;
-        $scope.score--;
-        $scope.randomNumbers1 = [];
-        $scope.randomNumbers2 = [];
-        $scope.randomNumbers3 = [];
-        getRandomNumbersNew();
-        return false;
-      }
-
-      // console.log(i);
-
-
-      // else if(checkIfNumbersAreConsecutive(permArr[i]) === false) {
-      //   console.log('minus');
-      //     $scope.score--;
-      //     return;
-      // }
-      // else {
-      //   console.log('minus');
-      //   $scope.score--;
-      //   return;
-      // }
-    }
+    // for (var i = 0; i < permArr.length; i++) {
+    //   // console.log(permArr[i]);
+    //   if (checkIfNumbersAreConsecutive(permArr[i]) === true) {
+    //
+    //       if(similarInputColors) {
+    //         $scope.score++;
+    //         // console.log('plus');
+    //         return;
+    //       }
+    //     // $scope.score++;
+    //     // console.log('plus');
+    //     // return;
+    //   } else if (i === 5) {
+    //     // console.log('minus');
+    //     firstNumber = undefined;
+    //     secondNumber = undefined;
+    //     thirdNumber = undefined;
+    //     $scope.score--;
+    //     $scope.randomNumbers1 = [];
+    //     $scope.randomNumbers2 = [];
+    //     $scope.randomNumbers3 = [];
+    //     getRandomNumbersNew();
+    //     return false;
+    //   }
+    // }
 
   };
 
@@ -185,10 +301,8 @@ angular.module('starter.controllers', [])
 
   $scope.game = true;
 
-
-
   var random = function() {
-    var num = Math.floor((Math.random() * 12) + 1);
+    var num = Math.floor((Math.random() * 3) + 1);
     return num;
   }
 
@@ -198,66 +312,209 @@ angular.module('starter.controllers', [])
   $scope.randomNumbers2 = [];
   $scope.randomNumbers3 = [];
 
-  var getRandomNumbers = function() {
-
-    for (var j = 0; j < i; j++) {
-      var lol1 = random();
-      var lol2 = random();
-      var lol3 = random();
-      $scope.randomNumbers1.push({num:lol1});
-      $scope.randomNumbers2.push({num:lol2});
-      $scope.randomNumbers3.push({num:lol3});
-    }
-
-
-  };
+  // var getRandomNumbers = function() {
+  //
+  //   for (var j = 0; j < i; j++) {
+  //     var lol1 = random();
+  //     var lol2 = random();
+  //     var lol3 = random();
+  //     $scope.randomNumbers1.push({num:lol1});
+  //     $scope.randomNumbers2.push({num:lol2});
+  //     $scope.randomNumbers3.push({num:lol3});
+  //   }
+  //
+  //   console.log($scope.randomNumbers1);
+  //   console.log($scope.randomNumbers1);
+  //   console.log($scope.randomNumbers1);
+  //
+  // };
 
   // getRandomNumbers();
 
+  // Hardcoded 81 cards
+  var cardDeck = [
+    // RED cards
+    // RED Number 1
+    {num:1,col:1,fill:1,sym:1},
+    {num:1,col:1,fill:1,sym:2},
+    {num:1,col:1,fill:1,sym:3},
 
-  // Get random numbers between
-  var getRandomNumbersNew = function() {
+    {num:1,col:1,fill:2,sym:1},
+    {num:1,col:1,fill:2,sym:2},
+    {num:1,col:1,fill:2,sym:3},
 
-    var numbersVB = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    var color1 = [1,2,3,1];
-    var color2 = [2,3,1,2];
-    var color3 = [3,1,2,3];
+    {num:1,col:1,fill:3,sym:1},
+    {num:1,col:1,fill:3,sym:2},
+    {num:1,col:1,fill:3,sym:3},
 
-    function shuffle(o) {
-      for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-      return o;
-    };
+    // RED number 2
+    {num:2,col:1,fill:1,sym:1},
+    {num:2,col:1,fill:1,sym:2},
+    {num:2,col:1,fill:1,sym:3},
 
-    var randomVB = shuffle(numbersVB);
-    var randomColor1 = shuffle(color1);
-    var randomColor2 = shuffle(color2);
-    var randomColor3 = shuffle(color3);
+    {num:2,col:1,fill:2,sym:1},
+    {num:2,col:1,fill:2,sym:2},
+    {num:2,col:1,fill:2,sym:3},
 
-    var uno = randomVB.slice(0,4);
-    var duo = randomVB.slice(3,7);
-    var trio = randomVB.slice(5,9);
-    console.log(uno);
+    {num:2,col:1,fill:3,sym:1},
+    {num:2,col:1,fill:3,sym:2},
+    {num:2,col:1,fill:3,sym:3},
 
+    // RED number 3
+    {num:3,col:1,fill:1,sym:1},
+    {num:3,col:1,fill:1,sym:2},
+    {num:3,col:1,fill:1,sym:3},
 
-    for (a=0;a<uno.length;a++) {
-      $scope.randomNumbers1.push({num:uno[a],col:randomColor1[a],click:false})
+    {num:3,col:1,fill:2,sym:1},
+    {num:3,col:1,fill:2,sym:2},
+    {num:3,col:1,fill:2,sym:3},
+
+    {num:3,col:1,fill:3,sym:1},
+    {num:3,col:1,fill:3,sym:2},
+    {num:3,col:1,fill:3,sym:3},
+
+    // GREEN cards
+    // GREEN Number 1
+    {num:1,col:2,fill:1,sym:1},
+    {num:1,col:2,fill:1,sym:2},
+    {num:1,col:2,fill:1,sym:3},
+
+    {num:1,col:2,fill:2,sym:1},
+    {num:1,col:2,fill:2,sym:2},
+    {num:1,col:2,fill:2,sym:3},
+
+    {num:1,col:2,fill:3,sym:1},
+    {num:1,col:2,fill:3,sym:2},
+    {num:1,col:2,fill:3,sym:3},
+
+    // GREEN number 2
+    {num:2,col:2,fill:1,sym:1},
+    {num:2,col:2,fill:1,sym:2},
+    {num:2,col:2,fill:1,sym:3},
+
+    {num:2,col:2,fill:2,sym:1},
+    {num:2,col:2,fill:2,sym:2},
+    {num:2,col:2,fill:2,sym:3},
+
+    {num:2,col:2,fill:3,sym:1},
+    {num:2,col:2,fill:3,sym:2},
+    {num:2,col:2,fill:3,sym:3},
+
+    // GREEN number 3
+    {num:3,col:2,fill:1,sym:1},
+    {num:3,col:2,fill:1,sym:2},
+    {num:3,col:2,fill:1,sym:3},
+
+    {num:3,col:2,fill:2,sym:1},
+    {num:3,col:2,fill:2,sym:2},
+    {num:3,col:2,fill:2,sym:3},
+
+    {num:3,col:2,fill:3,sym:1},
+    {num:3,col:2,fill:3,sym:2},
+    {num:3,col:2,fill:3,sym:3},
+
+    // PURPLE cards
+    // PURPLE Number 1
+    {num:1,col:3,fill:1,sym:1},
+    {num:1,col:3,fill:1,sym:2},
+    {num:1,col:3,fill:1,sym:3},
+
+    {num:1,col:3,fill:2,sym:1},
+    {num:1,col:3,fill:2,sym:2},
+    {num:1,col:3,fill:2,sym:3},
+
+    {num:1,col:3,fill:3,sym:1},
+    {num:1,col:3,fill:3,sym:2},
+    {num:1,col:3,fill:3,sym:3},
+
+    // PURPLE number 2
+    {num:2,col:3,fill:1,sym:1},
+    {num:2,col:3,fill:1,sym:2},
+    {num:2,col:3,fill:1,sym:3},
+
+    {num:2,col:3,fill:2,sym:1},
+    {num:2,col:3,fill:2,sym:2},
+    {num:2,col:3,fill:2,sym:3},
+
+    {num:2,col:3,fill:3,sym:1},
+    {num:2,col:3,fill:3,sym:2},
+    {num:2,col:3,fill:3,sym:3},
+
+    // PURPLE number 3
+    {num:3,col:3,fill:1,sym:1},
+    {num:3,col:3,fill:1,sym:2},
+    {num:3,col:3,fill:1,sym:3},
+
+    {num:3,col:3,fill:2,sym:1},
+    {num:3,col:3,fill:2,sym:2},
+    {num:3,col:3,fill:2,sym:3},
+
+    {num:3,col:3,fill:3,sym:1},
+    {num:3,col:3,fill:3,sym:2},
+    {num:3,col:3,fill:3,sym:3}
+  ];
+
+  var getRandomNumber = function() {
+    var number = Math.floor(Math.random()*cardDeck.length);
+    // console.log(number);
+    return number;
+    // return Math.floor(Math.random()*cardDeck.length);
+  };
+
+  $scope.randomNumbers = [];
+
+  // Array to check cards on current table
+  var arrayCardsOnTable = [];
+  var removeTheseCards = [];
+  // var newArrayCardsOnTable = [];
+
+  // Function to get Random cards
+  // 81 cards
+  var getRandomNumbersNew = function () {
+    // Got Array Carddeck with 81 cards
+    // Everytime cards shuffled, 12 cards on table
+
+    for (var y = 0; y<12;y++) {
+      var number = getRandomNumber();
+      var item = cardDeck[number];
+      arrayCardsOnTable.push(item);
+      $scope.randomNumbers.push(item);
+      cardDeck.splice(number,1);
     }
 
-    // console.log($scope.randomNumbers1);
+    newArrayCardsOnTable = angular.copy(arrayCardsOnTable);
 
-    for (b=0;b<duo.length;b++) {
-      $scope.randomNumbers2.push({num:duo[b],col:randomColor2[b],click:false})
-    }
+    // console.log(arrayCardsOnTable);
+    // console.log(cardDeck);
 
-    for (c=0;c<trio.length;c++) {
-      $scope.randomNumbers3.push({num:trio[c],col:randomColor3[c],click:false})
-    }
+    $scope.randomNumbers1.push(arrayCardsOnTable[0]);
+    $scope.randomNumbers1.push(arrayCardsOnTable[1]);
+    $scope.randomNumbers1.push(arrayCardsOnTable[2]);
+    $scope.randomNumbers1.push(arrayCardsOnTable[3]);
 
-    console.log($scope.randomNumbers1);
-    console.log($scope.randomNumbers2);
-    console.log($scope.randomNumbers3);
+    $scope.randomNumbers2.push(arrayCardsOnTable[4]);
+    $scope.randomNumbers2.push(arrayCardsOnTable[5]);
+    $scope.randomNumbers2.push(arrayCardsOnTable[6]);
+    $scope.randomNumbers2.push(arrayCardsOnTable[7]);
 
+    $scope.randomNumbers3.push(arrayCardsOnTable[8]);
+    $scope.randomNumbers3.push(arrayCardsOnTable[9]);
+    $scope.randomNumbers3.push(arrayCardsOnTable[10]);
+    $scope.randomNumbers3.push(arrayCardsOnTable[11]);
 
+  };
+
+  var get3NewCards = function (row, index) {
+    var number = randomNumbers();
+    var item = cardDeck[number];
+    // if (row === 1) {
+    //   $scope.randomNumbers1.push(arrayCardsOnTable[0]);
+    // } else if (row === 2) {
+    //
+    // } else if (row === 3) {
+    //
+    // }
+    // console.log(arrayCardsOnTable);
   };
 
   getRandomNumbersNew();
@@ -274,16 +531,25 @@ angular.module('starter.controllers', [])
 
     if (row === 1) {
       if (firstNumber === undefined || firstNumber === null) {
+        // arrayCardsOnTable[index] = 'replace';
+        removeTheseCards.push({row:1,number:index});
+
         firstNumber = $scope.randomNumbers1[index];
         $scope.randomNumbers1[index].click = true;
         console.log(firstNumber);
         $scope.firstNumber = firstNumber.num;
       } else if (secondNumber === undefined || secondNumber === null) {
+        // arrayCardsOnTable[index] = 'replace';
+        removeTheseCards.push({row:1,number:index});
+        // cardsChosenByPlayer.push({row:1,number:index});
         secondNumber = $scope.randomNumbers1[index];
         $scope.randomNumbers1[index].click = true;
         console.log(secondNumber);
         $scope.secondNumber = secondNumber.num;
       } else if (thirdNumber === undefined || thirdNumber === null) {
+        // arrayCardsOnTable[index] = 'replace';
+        removeTheseCards.push({row:1,number:index});
+        // cardsChosenByPlayer.push({row:1,number:index});
         thirdNumber = $scope.randomNumbers1[index];
         $scope.randomNumbers1[index].click = true;
         console.log(thirdNumber);
@@ -292,6 +558,8 @@ angular.module('starter.controllers', [])
         // Set 3 choices in order
         var inputArrayNumber = [];
         var inputArrayColor = [];
+        var inputArrayFilling = [];
+        var inputArraySymbol = [];
 
         inputArrayNumber.push(firstNumber.num);
         inputArrayNumber.push(secondNumber.num);
@@ -299,24 +567,38 @@ angular.module('starter.controllers', [])
         inputArrayColor.push(firstNumber.col);
         inputArrayColor.push(secondNumber.col);
         inputArrayColor.push(thirdNumber.col);
-        var inputArray = [inputArrayNumber,inputArrayColor];
-        console.log(inputArray);
+        inputArrayFilling.push(firstNumber.fill);
+        inputArrayFilling.push(secondNumber.fill);
+        inputArrayFilling.push(thirdNumber.fill);
+        inputArraySymbol.push(firstNumber.sym);
+        inputArraySymbol.push(secondNumber.sym);
+        inputArraySymbol.push(thirdNumber.sym);
+
+        var inputArray = [inputArrayNumber,inputArrayColor,inputArrayFilling,inputArraySymbol];
+        // console.log(inputArray);
         controleInput(inputArray);
+        // console.log(cardsChosenByPlayer);
       }
 
     } else if (row ===2) {
 
       if (firstNumber === undefined || firstNumber === null) {
+        // cardsChosenByPlayer.push({row:2,number:index});
+        removeTheseCards.push({row:2,number:index});
         firstNumber = $scope.randomNumbers2[index];
         $scope.randomNumbers2[index].click = true;
         console.log(firstNumber);
         $scope.firstNumber = firstNumber.num;
       } else if (secondNumber === undefined || secondNumber === null) {
+        removeTheseCards.push({row:2,number:index});
+        // cardsChosenByPlayer.push({row:2,number:index});
         secondNumber = $scope.randomNumbers2[index];
         $scope.randomNumbers2[index].click = true;
         console.log(secondNumber);
         $scope.secondNumber = secondNumber.num;
       } else if (thirdNumber === undefined || thirdNumber === null) {
+        // cardsChosenByPlayer.push({row:2,number:index});
+        removeTheseCards.push({row:2,number:index});
         thirdNumber = $scope.randomNumbers2[index];
         $scope.randomNumbers2[index].click = true;
         console.log(thirdNumber);
@@ -324,6 +606,8 @@ angular.module('starter.controllers', [])
 
         var inputArrayNumber = [];
         var inputArrayColor = [];
+        var inputArrayFilling = [];
+        var inputArraySymbol = [];
 
         inputArrayNumber.push(firstNumber.num);
         inputArrayNumber.push(secondNumber.num);
@@ -331,24 +615,38 @@ angular.module('starter.controllers', [])
         inputArrayColor.push(firstNumber.col);
         inputArrayColor.push(secondNumber.col);
         inputArrayColor.push(thirdNumber.col);
-        var inputArray = [inputArrayNumber,inputArrayColor];
-        console.log(inputArray);
+        inputArrayFilling.push(firstNumber.fill);
+        inputArrayFilling.push(secondNumber.fill);
+        inputArrayFilling.push(thirdNumber.fill);
+        inputArraySymbol.push(firstNumber.sym);
+        inputArraySymbol.push(secondNumber.sym);
+        inputArraySymbol.push(thirdNumber.sym);
+
+        var inputArray = [inputArrayNumber,inputArrayColor,inputArrayFilling,inputArraySymbol];
+        // console.log(inputArray);
         controleInput(inputArray);
+        // console.log(cardsChosenByPlayer);
       }
 
     } else if (row===3) {
 
       if (firstNumber === undefined || firstNumber === null) {
+        // cardsChosenByPlayer.push({row:3,number:index});
+        removeTheseCards.push({row:3,number:index});
         firstNumber = $scope.randomNumbers3[index];
         $scope.randomNumbers3[index].click = true;
         console.log(firstNumber);
         $scope.firstNumber = firstNumber.num;
       } else if (secondNumber === undefined || secondNumber === null) {
+        // cardsChosenByPlayer.push({row:3,number:index});
+        removeTheseCards.push({row:3,number:index});
         secondNumber = $scope.randomNumbers3[index];
         $scope.randomNumbers3[index].click = true;
         console.log(secondNumber);
         $scope.secondNumber = secondNumber.num;
       } else if (thirdNumber === undefined || thirdNumber === null) {
+        // cardsChosenByPlayer.push({row:3,number:index});
+        removeTheseCards.push({row:3,number:index});
         thirdNumber = $scope.randomNumbers3[index];
         $scope.randomNumbers3[index].click = true;
         console.log(thirdNumber);
@@ -356,6 +654,8 @@ angular.module('starter.controllers', [])
 
         var inputArrayNumber = [];
         var inputArrayColor = [];
+        var inputArrayFilling = [];
+        var inputArraySymbol = [];
 
         inputArrayNumber.push(firstNumber.num);
         inputArrayNumber.push(secondNumber.num);
@@ -363,9 +663,17 @@ angular.module('starter.controllers', [])
         inputArrayColor.push(firstNumber.col);
         inputArrayColor.push(secondNumber.col);
         inputArrayColor.push(thirdNumber.col);
-        var inputArray = [inputArrayNumber,inputArrayColor];
-        console.log(inputArray);
+        inputArrayFilling.push(firstNumber.fill);
+        inputArrayFilling.push(secondNumber.fill);
+        inputArrayFilling.push(thirdNumber.fill);
+        inputArraySymbol.push(firstNumber.sym);
+        inputArraySymbol.push(secondNumber.sym);
+        inputArraySymbol.push(thirdNumber.sym);
+
+        var inputArray = [inputArrayNumber,inputArrayColor,inputArrayFilling,inputArraySymbol];
+        // console.log(inputArray);
         controleInput(inputArray);
+        // console.log(cardsChosenByPlayer);
 
       }
 
